@@ -1,0 +1,22 @@
+---
+- hosts: tomcat
+  become: true
+  tasks:
+  - name: install packages
+    yum: name={{item}} state=installed (or) present
+    with_items:
+       - httpd
+       - mysql
+       - mariadb
+      
+
+    apt: name={{item}} state=installed/present
+    with_items: 
+       - apache2
+    notify:
+      - starttomcat
+  handlers:
+    - name: starttomcat
+	  service: name=apache2 state=started
+
+

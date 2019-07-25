@@ -1,0 +1,31 @@
+---
+  - hosts: 192.168.75.3
+    tasks:
+    - name: making maven directory
+      file:
+        path: /opt/maven
+        state: directory
+    - name: download maven file
+      get_url:
+        url: http://mirrors.fibergrid.in/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
+        dest: /opt/maven
+    - name: extracting tarball file
+      unarchive:
+        src: /opt/maven/apache-maven-3.5.4-bin.tar.gz
+        dest: /opt/maven/
+        remote_src: yes
+    - name: setting an envinornmental variables
+      lineinfile:
+        path: /etc/bashrc
+        line: 'export MAVEN_HOME=/opt/maven/apache-maven-3.5.4/bin/maven'
+        state: present
+ lineinfile:
+        path: /etc/bashrc
+        line: 'export MAVEN_HOME=/opt/maven/apache-maven-3.5.4/bin/maven'
+        state: present
+      lineinfile:
+         path: /etc/bashrc
+         line: 'export PATH=$PATH:/opt/maven/apache-maven-3.5.4/bin'
+         state: present
+    - name: reloading the configuration file
+      shell: 'source /etc/bashrc'

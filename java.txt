@@ -1,0 +1,17 @@
+---
+- hosts: 192.168.75.3
+  tasks:
+  - name: making a java directory
+    file: path=/opt/java state=directory
+  - name: download java tar file
+    get_url:
+      url: 'http://download.oracle.com/otn-pub/java/jdk/11.0.1+13/90cf5d8f270a4347a95050320eef3fb7/jdk-11.0.1_linux-x64_bin.tar.gz'
+      dest: /opt/java
+      headers: 'Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie; --no-check-certificate'
+  - name: extracting java file
+    unarchive: src=/opt/java/jdk-11.0.1_linux-x64_bin.tar.gz dest=/opt/java remote_src=yes
+  - name: setting a environment variables
+    lineinfile: path=/etc/bashrc line='export JAVA_HOME=/opt/java/jdk-11.0.1/bin/java'
+    lineinfile: path=/etc/bashrc line='export PATH=$PATH:/opt/java/jdk-11.0.1/bin'
+  - name: reloading config file
+    shell: 'source /etc/bashrc'
