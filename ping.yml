@@ -1,5 +1,15 @@
 ---
 - hosts: all
+  become: yes
   tasks:
   - name: ping ansible machines
     ping: 
+  - name: install git
+    apt:
+      update_cache: yes
+      name: git
+      state: present
+  - name: install tree
+    apt:
+      name: tree
+      state: present
